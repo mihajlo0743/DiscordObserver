@@ -29,10 +29,8 @@ To start using this you need to:
 	##Console view
 	Console logger has another formatting:
   
-	```
 	Channel: ExampleChannel | ExampleServer
 	By: ExampleAuthor
 	Message: ExampleMessage
 	At: 0001-01-01 00:00:00
 	-------------END MESSAGE--------------
-	```
