@@ -26,11 +26,19 @@ To start using this you need to:
   `time` is a time when message was created
   `mentioned` indicating is you been mentioned in this message
   
-	##Console view
+## Console
 	Console logger has another formatting:
-  
+	
 	Channel: ExampleChannel | ExampleServer
 	By: ExampleAuthor
 	Message: ExampleMessage
 	At: 0001-01-01 00:00:00
 	-------------END MESSAGE--------------
+	
+	
+## Known bugs
+1. If you enter incorrect Discord token you will need to remove `config.json`
+2. In some cases messages wount appear and sometimes it is `null Reference`(idk how to fix this now)
+3. If you found new bug - report it please
+###### Afterwords
+###### Im learning programming right now, so i think there are much "bad code"...
