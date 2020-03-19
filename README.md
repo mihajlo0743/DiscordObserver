@@ -42,3 +42,4 @@ To start using this you need to:
 3. If you found new bug - report it please
 ###### Afterwords
 ###### Im learning programming right now, so i think there are much "bad code"...
+###### And Nikita, "ne besi plz"
