@@ -19,15 +19,20 @@ To start using this you need to:
  "mentioned":false}
  ```
  Where
-  `Author` is author of the message
-  `message` is literally removed message
-  `channel` is channel where this message was been
-  `server` is a Discord server(or Guild in official discord documentation) where message was been
-  `time` is a time when message was created
-  `mentioned` indicating is you been mentioned in this message
+  * `Author` is author of the message
+  * `message` is literally removed message
+  * `channel` is channel where this message was been
+  * `server` is a Discord server(or Guild in official discord documentation) where message was been
+  * `time` is a time when message was created
+  * `mentioned` indicating is you been mentioned in this message
   
+## Commands[WIP]
+* `?` or 'help' - displays list of all commands
+* `stop` - exit program
+* `clear` - clear console
+
 ## Console
-	Console logger has another formatting:
+Console logger has another formatting:
 	
 	Channel: ExampleChannel | ExampleServer
 	By: ExampleAuthor
