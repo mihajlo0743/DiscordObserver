@@ -2,10 +2,10 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using DSharpPlus;
-using DSharpPlus.EventArgs;
 using Newtonsoft.Json;
 using System.Linq;
+using DSharpPlus;
+using DSharpPlus.EventArgs;
 
 namespace DiscordObserver
 {
@@ -24,17 +24,24 @@ namespace DiscordObserver
                 {
                     Console.WriteLine("ERR: Invalid Token");
                     token = Request("Enter token: ");
+
+                    try
+                    {
+                        File.WriteAllText("./config.json", JsonConvert.SerializeObject(token));
+                    }
+                    catch { }
                 }
-                File.WriteAllText("./config.json", JsonConvert.SerializeObject(token));
             }
             Console.Clear();
-            config.Token = JsonConvert.DeserializeObject(File.ReadAllText("./config.json")).ToString();
+                try
+                {
+                    config.Token = JsonConvert.DeserializeObject(File.ReadAllText("./config.json")).ToString();
+                }
+                catch { }
             Console.WriteLine("Initializing client...");
             client = new DiscordClient(config);
             client.Ready += onReady;
             client.ClientErrored += onERR;
-            client.SocketErrored += onSerr;
-            client.MessageDeleted += MsgLogger;
             client.ConnectAsync();
             
             Thread.Sleep(-1);
@@ -56,22 +63,27 @@ namespace DiscordObserver
                     msg.channel = e.Message.Channel.Name;    msg.server = e.Message.Channel.Guild.Name;
                 }
                 catch {}
-                Console.WriteLine("By: "+e.Message.Author.Username);    msg.Author = e.Message.Author.Username;
-                Console.WriteLine("Message: " + e.Message.Content);     msg.message = e.Message.Content;
-                Console.WriteLine("At: "+e.Message.CreationTimestamp.UtcDateTime.ToString()+" - "+DateTime.Today.ToString());   
+                try
+                {
+                    Console.WriteLine("By: " + e.Message.Author.Username); msg.Author = e.Message.Author.Username;
+                }
+                catch { Console.WriteLine("Author name error(null)"); }
+                    Console.WriteLine("Message: " + e.Message.Content + " | " + e.Message.Embeds.ToString());
+                    msg.message = e.Message.Content;
+                Console.WriteLine("At: "+e.Message.CreationTimestamp.UtcDateTime.ToString()+" - "+DateTime.Now.ToString());   
                 msg.C_time = e.Message.CreationTimestamp.UtcDateTime; msg.R_time = DateTime.Today;
-                if (e.Message.MentionedUsers.Contains(client.CurrentUser)) { Console.WriteLine("Mentioned!"); msg.mentioned = true; }
-
+                /*if (e.Message.MentionedUsers.Contains(client.CurrentUser)) { Console.WriteLine("Mentioned!"); msg.mentioned = true; }*/
             }
             catch(Exception excp) { Console.WriteLine("ERR: "+ excp.ToString());  }
             File.AppendAllText("./Log.json", JsonConvert.SerializeObject(msg)+Environment.NewLine);
 
             Console.WriteLine("-------------END MESSAGE--------------");
-            return null;
+            return Task.CompletedTask;
         }
 
         private static Task onReady(ReadyEventArgs e)
         {
+            client.SocketErrored += onSerr;
             Console.WriteLine("Init: Completed!");
             Console.WriteLine("DiscordObserver. By mihajlo0743");
             if (e.Client.CurrentUser != null)
@@ -83,19 +95,24 @@ namespace DiscordObserver
                 Console.WriteLine("ERR: Invalid token!");
             }
             Console.WriteLine("");
-            return null;
+            client.MessageDeleted += MsgLogger;
+            return Task.CompletedTask;
         }
 
         private static Task onERR(ClientErrorEventArgs e)
         {
-            Console.WriteLine("Exception: " + e.Exception);
+            Console.WriteLine("!-------------------------------!");
+            Console.WriteLine("Exception: ClientError" /*+ e.Exception*/);
             Console.WriteLine("Name: " + e.EventName);
-            return null;
+            Console.WriteLine("!-------------------------------!");
+            return Task.CompletedTask;
         }
         private static Task onSerr(SocketErrorEventArgs e)
         {
-            Console.WriteLine("Exception: " + e.Exception);
-            return null;
+            Console.WriteLine("!-------------------------------!");
+            Console.WriteLine("Exception: SoketError" /*+ e.Exception*/);
+            Console.WriteLine("!-------------------------------!");
+            return Task.CompletedTask;
         }
     }
 }
